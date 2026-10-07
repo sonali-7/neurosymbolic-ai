@@ -1,6 +1,7 @@
 import sys
 import operator 
 
+# E ::= x | y | 0 | 1 | 2 | + E E | - E E | * E E
 OPS = { 
     '+': operator.add, 
     '-': operator.sub,
@@ -9,7 +10,7 @@ OPS = {
 
 TERMINALS = ['x', 'y', '0', '1', '2']
 
-
+# go through and parse input file 
 if len(sys.argv) < 2:
     print("Error: Please provide a filename.")
     print("Usage: python program.py <filename>")
@@ -25,6 +26,7 @@ try:
             if not line or line.startswith('#'):
                 continue
 
+            # take in 3 values of x, y, target output
             parts = [int(val.strip()) for val in line.split(',')]
             x, y, target = parts[0], parts[1], parts[2]
             examples.append((x, y, target))
@@ -32,7 +34,7 @@ except FileNotFoundError:
     print(f"Error: File '{filename}' not found.")
     sys.exit(1)
 
-
+# replace values of x & y with corresponding values from input
 def eval_terminal(token: str, x: int, y: int) -> int:
     if token == 'x':
         return x
@@ -41,6 +43,7 @@ def eval_terminal(token: str, x: int, y: int) -> int:
     else:
         return int(token)
     
+# generate correct program
 def synthesize(examples, max_size=15):
     target_outputs = tuple(target for _, _, target in examples)
     expressions_by_size = {}
